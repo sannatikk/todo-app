@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { json } from 'express'
 
-const base_url = 'http://localhost:3001/'
+const base_url = 'http://localhost:3001'
 
 describe('GET Tasks', () => {
     it ('should return all tasks', async() => {
@@ -18,7 +18,7 @@ describe('GET Tasks', () => {
 
 describe('POST Task', () => {
     it ('should post a task', async() => {
-        const response = await fetch(base_url + 'create', {
+        const response = await fetch(base_url + '/create', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
@@ -32,7 +32,7 @@ describe('POST Task', () => {
     })
 
     it ('should not post a task without description', async() => {
-        const response = await fetch(base_url + 'create', {
+        const response = await fetch(base_url + '/create', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ describe('POST Task', () => {
 
 describe ('DELETE Task', () => {
     it ('should delete a task', async() => {
-        const response = await fetch(base_url + 'delete/1', {
+        const response = await fetch(base_url + '/delete/1', {
             method: 'delete'
         })
         const data = await response.json()
@@ -58,12 +58,30 @@ describe ('DELETE Task', () => {
     })
 
     it ('should not deleta task with SQL injection', async() => {
-        const response = await fetch(base_url + 'delete/id=0 or id > 0', {
+        const response = await fetch(base_url + '/delete/id=0 or id > 0', {
             method: 'delete'
         })
         const data = await response.json()
         expect(response.status).to.equal(500)
         expect(data).to.be.an('object')
         expect(data).to.include.all.keys('error')
+    })
+})
+
+describe('POST register', () => {
+    const email = 'register@foo.com'
+    const password = 'register123'
+    it ('should register with valid email and password', async() => {
+        const response = await fetch(base_url + '/user/register', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({'email': email, 'password': password})
+        })
+        const data = await response.json()
+        expect(response.status).to.equal(201, data.error)
+        expect(data).to.be.an('object')
+        expect(data).to.include.all.keys('id', 'email')
     })
 })
