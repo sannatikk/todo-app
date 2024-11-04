@@ -7,18 +7,12 @@ const invalidCredentials = "Invalid credentials"
 
 const auth = (req, res, next) => {
 
-    console.log("Authenticating request")
-    // console.log("Secret Key: " + process.env.JWT_SECRET_KEY)
-
     if (!req.headers.authorization) {
         res.statusMessage = authorizationRequired
         res.status(401).json({ message: authorizationRequired })
     } else {
         try {
             const token = req.headers.authorization
-            // const token = req.headers.authorization.split(' ')[1]; // Extract token correctly
-
-            console.log("Received token: " + token)
             jwt.verify(token, process.env.JWT_SECRET_KEY)
             next()
         } catch (err) {
@@ -28,4 +22,4 @@ const auth = (req, res, next) => {
     }
 }
 
-export default { auth }
+export { auth }

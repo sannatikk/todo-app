@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import './App.css';
+import './Home.css';
 import axios from 'axios';
 import Row from './components/Row';
 
 const url = 'http://localhost:3001/'
 
-function App() {
+function Home() {
 
   const [task, setTask] = useState(''); // task is a string description of a task
   const [tasks, setTasks] = useState([]); // tasks is an array containing all tasks
@@ -75,4 +75,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
