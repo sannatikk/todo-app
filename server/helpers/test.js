@@ -2,6 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import { pool } from './db.js';
 import { hash } from 'bcrypt';
+import pkg from 'jsonwebtoken';
+const { sign } = pkg;
+
 
 const __dirname = import.meta.dirname
 
@@ -19,4 +22,9 @@ const insertTestUser = async (email, password) => {
     console.log('Test user inserted:', email);
 };
 
-export { initializeTestDb, insertTestUser }
+const getToken = (email) => {
+    // console.log('Secret Key in getToken: ', process.env.JWT_SECRET_KEY);
+    return sign({user: email}, process.env.JWT_SECRET_KEY)
+}
+
+export { initializeTestDb, insertTestUser, getToken }

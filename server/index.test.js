@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 import { json } from 'express'
-import { initializeTestDb, insertTestUser } from './helpers/test.js'
+import { initializeTestDb, insertTestUser, getToken } from './helpers/test.js'
+import jwt from 'jsonwebtoken'
 
 const base_url = 'http://localhost:3001'
 
@@ -24,15 +25,23 @@ describe('GET Tasks', () => {
 
 describe('POST Task', () => {
 
+    const email = 'post@foo.com'
+    const password = 'post123'
+
     before(async() => {
         await initializeTestDb();
+        await insertTestUser(email, password)
     })
 
+    const token = getToken(email)
+
     it ('should post a task', async() => {
+
         const response = await fetch(base_url + '/create', {
             method: 'post',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: token
             },
             body: JSON.stringify({description: 'Task from unit test'})
         })
@@ -46,7 +55,8 @@ describe('POST Task', () => {
         const response = await fetch(base_url + '/create', {
             method: 'post',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: token
             },
             body: JSON.stringify({'description': null})
         })
@@ -59,13 +69,22 @@ describe('POST Task', () => {
 
 describe ('DELETE Task', () => {
 
+    const email = 'delete@foo.com'
+    const password = 'delete123'
+
     before(async() => {
         await initializeTestDb();
+        await insertTestUser(email, password)
     })
+
+    const token = getToken(email)
 
     it ('should delete a task', async() => {
         const response = await fetch(base_url + '/delete/1', {
-            method: 'delete'
+            method: 'delete',
+            headers: {
+                Authorization: token
+            }
         })
         const data = await response.json()
         expect(response.status).to.equal(200)
@@ -73,9 +92,12 @@ describe ('DELETE Task', () => {
         expect(data).to.include.all.keys('id')
     })
 
-    it ('should not deleta task with SQL injection', async() => {
+    it ('should not delete a task with SQL injection', async() => {
         const response = await fetch(base_url + '/delete/id=0 or id > 0', {
-            method: 'delete'
+            method: 'delete',
+            headers: {
+                Authorization: token
+            }
         })
         const data = await response.json()
         expect(response.status).to.equal(500)
