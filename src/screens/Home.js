@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import './Home.css';
 import axios from 'axios';
 import Row from '../components/Row';
+import { useUser } from '../context/useUser'
 
 const url = 'http://localhost:3001/'
 
 function Home() {
 
+  const { user } = useUser()
   const [task, setTask] = useState(''); // task is a string description of a task
   const [tasks, setTasks] = useState([]); // tasks is an array containing all tasks
 
@@ -21,9 +23,11 @@ function Home() {
 
   const addTask = () => {
 
+    const headers = {headers: {Authorization: user.token}}
+
     axios.post(url + 'create', {
       description: task
-    })
+    }, headers)
     .then (response => {
       setTasks([...tasks, {id: response.data.id, description: task}])
       setTask('')
@@ -34,7 +38,9 @@ function Home() {
 
   const deleteTask = (deleted) => {
 
-    axios.delete(url + 'delete/' + deleted)
+    const headers = {headers: {Authorization: user.token}}
+
+    axios.delete(url + 'delete/' + deleted, headers)
       .then(response => {
         const withoutRemoved = tasks.filter((item) => item.id !== deleted)
         setTasks(withoutRemoved)
