@@ -1,46 +1,13 @@
 
-import { pool } from '../helpers/db.js'
-import { Router } from 'express'
-import { emptyOrRows } from '../helpers/utils.js'
-import { auth } from '../helpers/auth.js'
+import { pool } from '../helpers/db.js' // Import the pool instance from the db.js file
+import { Router } from 'express'        // Import the Router class from the express package to create routes for the API
+import { auth } from '../helpers/auth.js'        // Import the auth function from the auth.js file to authenticate users
+import { getTasks, postTask, deleteTask } from '../controllers/TaskController.js'
 
-const router = Router()
+const router = Router() // Create a new router instance
 
-router.get('/', (req, res, next) => {
-    pool.query('select * from task', (error, result) => {
-        if (error) {
-            return next(error)
-        } else {
-            return res.status(200).json(emptyOrRows(result))
-        }
-    })
-})
-
-router.post('/create', auth, (req, res, next) => {
-    pool.query('insert into task (description) values ($1) returning *', 
-        [req.body.description], 
-        (error, result) => {
-        if (error) {
-            return next(error)
-        } else {
-            return res.status(200).json({id: result.rows[0].id})
-            }
-        }
-    )
-})
-
-router.delete('/delete/:id', auth, (req, res, next) => {
-    const id = parseInt(req.params.id)
-    pool.query('delete from task where id = $1', 
-        [id], 
-        (error, result) => {
-        if (error) {
-            return next(error)
-        } else {
-            return res.status(200).json({id: id})
-            }
-        }
-    )
-})
+router.get('/', getTasks)
+router.post('/create', auth, postTask) 
+router.delete('/delete/:id', auth, deleteTask)  
 
 export default router   
