@@ -1,18 +1,35 @@
-#container {
-  padding: 20px;
-}
-
-h3 {
-  color: #333;
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
 body {
   background-color: #e6dfea;
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: 16px;
+  padding: 20px;
+  line-height: 1.5;
+
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  align-items: flex-start;
 }
+
+#container {
+  border: 1px solid #333;
+  border-radius: 12px;
+  border-color: #333;
+  padding: 20px;
+  margin: 20px;
+  max-width: fit-content;
+  max-height: fit-content; 
+  overflow-y: auto;
+}
+
+h3 {
+  font-style: italic;
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 20px;
+  margin-top: 0;
+}
+
 
 li {
   margin-bottom: 5px;
@@ -20,4 +37,26 @@ li {
 
 .deleteButton {
   margin-left: 10px;
+}
+
+/* Styles for narrower screens (mobile view) */
+@media (max-width: 600px) {
+  body {
+    padding: 10px; /* Optional: Reduce body padding for smaller screens */
+  }
+
+  #container {
+    max-width: 100%; /* Allow container to take up full width */
+    padding: 15px; /* Adjust padding to fit mobile view */
+  }
+
+  h3 {
+    font-size: 24px; /* Adjust font size for smaller screens */
+    margin-bottom: 15px;
+  }
+  
+  input {
+    width: 100%; /* Ensure input fields and buttons take full width */
+    margin-bottom: 10px; /* Add space below each for readability */
+  };
 }

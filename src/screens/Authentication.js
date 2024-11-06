@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-// import './Authentication.css'
+import './Authentication.css'
 import React from 'react'
 import { useUser } from '../context/useUser'
 
@@ -30,24 +30,24 @@ export default function Authentication({authenticationMode}) {
     }
     
     return (
-        <div>
+        <div className='authContainer'>
             <h3>{authenticationMode === AuthenticationMode.Login ? 'Sign in' : 'Sign up'}</h3>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Email</label>
-                    <input type="email" value={user.email} onChange={e => setUser({...user, email: e.target.value})} />
+                    <label className="loginLabels">Email</label>
+                    <input className="loginInputs" type="email" value={user.email} onChange={e => setUser({...user, email: e.target.value})} />
                 </div>
                 <div>
-                    <label>Password</label>
-                    <input type="password" value={user.password} onChange={e => setUser({...user, password: e.target.value})} />
+                    <label className="loginLabels">Password</label>
+                    <input className="loginInputs" type="password" value={user.password} onChange={e => setUser({...user, password: e.target.value})} />
                 </div>
                 <div>
-                    <button>{authenticationMode === AuthenticationMode.Login ? 'Login' : 'Submit'}</button>
+                    <button className="loginButton">{authenticationMode === AuthenticationMode.Login ? 'Login' : 'Submit'}</button>
                 </div>
-                <Link to={authenticationMode === AuthenticationMode.Login ? '/signup' : '/signin'}>
+            </form>                
+            <Link to={authenticationMode === AuthenticationMode.Login ? '/signup' : '/signin'}>
                     {authenticationMode === AuthenticationMode.Login ? 'No account? Sign up!' : 'Already have an account? Sign in!'}
-                </Link>
-            </form>
+            </Link>
         </div>
     )
 }

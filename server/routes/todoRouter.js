@@ -1,10 +1,8 @@
-
-import { pool } from '../helpers/db.js' // Import the pool instance from the db.js file
-import { Router } from 'express'        // Import the Router class from the express package to create routes for the API
-import { auth } from '../helpers/auth.js'        // Import the auth function from the auth.js file to authenticate users
+import { Router } from 'express'  // Import the Router class from the express package to create routes for the API
+import { auth } from '../helpers/auth.js'
 import { getTasks, postTask, deleteTask } from '../controllers/TaskController.js'
 
-const router = Router() // Create a new router instance
+const router = Router()
 
 router.get('/', getTasks)
 router.post('/create', auth, postTask) 

@@ -1,0 +1,19 @@
+.loginInputs {
+    margin-left: 10px;
+  }
+  
+.loginButton {
+    margin: 15px;
+    font-size: 13px;
+  }
+
+.authContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.authContainer form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}

@@ -130,6 +130,7 @@ describe('POST register', () => {
     it ('should register with valid email and password', async() => {
         const email = 'register@foo.com'
         const password = 'register123'
+        console.log("Testing registration with email", email)
         const response = await fetch(base_url + '/user/register', {
             method: 'post',
             headers: {
@@ -143,9 +144,10 @@ describe('POST register', () => {
         expect(data).to.include.all.keys('id', 'email')
     })
 
-    it ('should not register with <8 character password', async() => {
+    it ('should not register with < 8 character password', async() => {
         const email = 'shortregister@foo.com'
         const password = 'short1'
+        console.log("Testing registration with faulty password", password)
         const response = await fetch(base_url + '/user/register', {
             method: 'post',
             headers: {
